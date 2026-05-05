@@ -1,0 +1,18 @@
+# Terraform
+terraform/terraform.tfvars
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+terraform/*.tfplan
+terraform/.terraform.lock.hcl
+
+# Lambda build artifacts
+lambdas/**/dist/
+lambdas/**/node_modules/
+
+# Environment
+.env
+.env.*
+
+# OS
+.DS_Store
