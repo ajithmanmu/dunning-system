@@ -49,7 +49,8 @@ interface DunningPayload {
 }
 
 export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  const sig = event.headers['stripe-signature'];
+  const sigKey = Object.keys(event.headers || {}).find(k => k.toLowerCase() === 'stripe-signature');
+  const sig = sigKey ? event.headers[sigKey] : null;
 
   if (!sig) {
     return { statusCode: 400, body: 'Missing stripe-signature header' };
