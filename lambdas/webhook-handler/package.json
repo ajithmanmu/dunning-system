@@ -9,7 +9,8 @@
       "stripe": "^17.0.0",
       "@aws-sdk/client-dynamodb": "^3.0.0",
       "@aws-sdk/lib-dynamodb": "^3.0.0",
-      "@aws-sdk/client-sfn": "^3.0.0"
+      "@aws-sdk/client-sfn": "^3.0.0",
+      "@aws-sdk/client-secrets-manager": "^3.0.0"
     },
     "devDependencies": {
       "typescript": "^5.0.0",
