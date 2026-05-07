@@ -8,6 +8,7 @@ terraform/*.tfplan
 # Lambda build artifacts
 lambdas/**/dist/
 lambdas/**/node_modules/
+lambdas/**/*.zip
 
 # Environment
 .env
