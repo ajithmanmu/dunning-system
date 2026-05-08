@@ -1,0 +1,17 @@
+{
+  "name": "payment-checker",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "stripe": "^17.0.0",
+    "@aws-sdk/client-secrets-manager": "^3.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "@types/node": "^20.0.0",
+    "@types/aws-lambda": "^8.10.0"
+  }
+}

@@ -2,10 +2,12 @@ import Stripe from 'stripe';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocumentClient, PutCommand, GetCommand } from '@aws-sdk/lib-dynamodb';
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
+import { SFNClient, StartExecutionCommand } from '@aws-sdk/client-sfn';
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from 'aws-lambda';
 
 const dynamodb = DynamoDBDocumentClient.from(new DynamoDBClient({}));
 const secretsManager = new SecretsManagerClient({});
+const sfn = new SFNClient({});
 
 const HARD_DECLINE_CODES = ['stolen_card', 'lost_card', 'do_not_honor', 'pickup_card'];
 
@@ -113,6 +115,11 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
   console.log('Starting dunning sequence:', JSON.stringify(payload));
 
-  // Step Functions wired in next
+  await sfn.send(new StartExecutionCommand({
+    stateMachineArn: process.env.STATE_MACHINE_ARN!,
+    name: stripeEvent.id,
+    input: JSON.stringify(payload)
+  }));
+
   return { statusCode: 200, body: 'OK' };
 };
