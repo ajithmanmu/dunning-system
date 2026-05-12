@@ -37,10 +37,6 @@ async function getWebhookSecret(): Promise<string> {
   return cachedWebhookSecret;
 }
 
-interface InvoiceWithPaymentError extends Stripe.Invoice {
-  last_payment_error?: { code?: string };
-}
-
 interface DunningPayload {
   customerId: string;
   invoiceId: string;
@@ -100,8 +96,17 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
     }
   }));
 
-  const invoice = stripeEvent.data.object as InvoiceWithPaymentError;
-  const failureCode = invoice.last_payment_error?.code ?? 'unknown';
+  const invoice = stripeEvent.data.object as Stripe.Invoice;
+
+  let failureCode = 'unknown';
+  if (invoice.customer && typeof invoice.customer === 'string') {
+    const charges = await stripe.charges.list({ customer: invoice.customer, limit: 1 });
+    const charge = charges.data[0];
+    if (charge) {
+      failureCode = (charge.outcome?.reason ?? charge.failure_code) || 'unknown';
+    }
+  }
+
   const declineType: 'hard' | 'soft' = HARD_DECLINE_CODES.includes(failureCode) ? 'hard' : 'soft';
 
   const payload: DunningPayload = {
