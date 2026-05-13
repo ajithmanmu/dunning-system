@@ -120,9 +120,15 @@ export const handler = async (event: APIGatewayProxyEvent): Promise<APIGatewayPr
 
   console.log('Starting dunning sequence:', JSON.stringify(payload));
 
+  const customerName = (invoice.customer_name ?? 'unknown')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  const executionName = `${customerName}-${declineType}-${stripeEvent.id.slice(-8)}`;
+
   await sfn.send(new StartExecutionCommand({
     stateMachineArn: process.env.STATE_MACHINE_ARN!,
-    name: stripeEvent.id,
+    name: executionName,
     input: JSON.stringify(payload)
   }));
 
