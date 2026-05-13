@@ -1,5 +1,7 @@
 # Dunning System
 
+> 📝 Blog post: [When Stripe's Built-In Dunning Isn't Enough](https://dev.to/ajithmanmu/when-stripes-built-in-dunning-isnt-enough-16m2)
+
 A custom subscription payment recovery system built on AWS. When Stripe detects a failed payment, this system routes each failure through a tiered recovery workflow — giving different customers different levels of retry patience based on their tier and the specific reason the payment failed.
 
 ## Why Build This?
